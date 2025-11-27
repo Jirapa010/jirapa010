@@ -16,26 +16,19 @@ if ($result->num_rows === 1) {
 
     // ตรวจสอบรหัสผ่านที่เข้ารหัสไว้ด้วย password_verify
     if (password_verify($password, $row['password'])) {
+
         // ตั้งค่า session
         $_SESSION['mem_id'] = $row['id'];
         $_SESSION['fullname'] = $row['full_name'];
         $_SESSION['email'] = $row['email'];
+        $_SESSION['position'] = $row['position'];   // ⭐ สำคัญมาก!
 
-        if($row['position'] == 'admin'){
-            echo "<script>
-                    window.location='admin/index.php';
-                 </script>";
-        }elseif($row['position'] == 'user'){
-            echo "<script>
-                    window.location='profile.php';
-                 </script>";
+        // ส่งเข้าหน้าตามสิทธิ์
+        if ($row['position'] == 'admin') {
+            echo "<script> window.location='admin/index.php'; </script>";
+        } elseif ($row['position'] == 'user') {
+            echo "<script> window.location='profile.php'; </script>";
         }
-        exit();
-
-        echo "<script>
-                alert('เข้าสู่ระบบสำเร็จ!');
-                window.location='profile.php';
-              </script>";
         exit();
     } else {
         echo "<script>alert('รหัสผ่านไม่ถูกต้อง'); window.history.back();</script>";
